@@ -1,7 +1,22 @@
+using Microsoft.EntityFrameworkCore;
+using SKWebChatBot.Data;
+using SKWebChatBot.Services;
+using System.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<SemanticKernelService>();
 builder.Services.AddControllersWithViews();
+
+var connexion = builder.Configuration.GetConnectionString("SKWebChatBotBdtConnection");
+builder.Services.AddDbContext<AppDbContext>(o =>
+{
+    o.UseSqlServer(builder.Configuration.GetConnectionString("SKWebChatBotBdtConnection"),
+        o => o.CommandTimeout(300));
+    o.EnableSensitiveDataLogging();
+}, ServiceLifetime.Transient);
+
 
 var app = builder.Build();
 

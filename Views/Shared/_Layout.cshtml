@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SKWebChatBot.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
@@ -41,9 +42,36 @@
             &copy; 2025 - SKWebChatBot - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
+    <!-- Floating Chat Button -->
+    <button id="chatbot-btn" class="btn btn-primary rounded-circle" onclick="toggleChat()">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <!-- Chat Popup -->
+    <div id="chat-popup">
+        <div id="chat-header">
+            <span>AI Chatbot</span>
+            <button onclick="toggleChat()" class="btn-close"></button>
+        </div>
+        <div id="chat-body">
+            @await Html.PartialAsync("_ChatPopup")
+        </div>
+    </div>
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+     <!-- JavaScript for Chat Window -->
+    <script>
+        function toggleChat() {
+            let chatPopup = document.getElementById("chat-popup");
+            chatPopup.style.display = (chatPopup.style.display === "none" || chatPopup.style.display === "") ? "flex" : "none";
+        }
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
