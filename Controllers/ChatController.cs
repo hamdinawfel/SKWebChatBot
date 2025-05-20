@@ -6,19 +6,27 @@ namespace SKWebChatBot.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChatController : ControllerBase
+    public class ChatController(SemanticKernelService _semanticKernelService, ChatService _chatService) : ControllerBase
     {
-        private readonly SemanticKernelService _semanticKernelService;
-        public ChatController(SemanticKernelService semanticKernelService)
+        [HttpGet("{sessionId}")]
+        public async Task<ActionResult> GetMessagesAsync(string sessionId)
         {
-            _semanticKernelService = semanticKernelService;
+            var messages = await _chatService.GetMessagesAsync(sessionId);
+            return Ok(messages);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetChatResponseAsync(string userMessage)
+        public async Task<ActionResult> GetChatResponseAsync([FromBody] ChatRequest chatRequest)
         {
-            var response = await _semanticKernelService.GetCharResponceAsync(userMessage);
+            var sessionId = chatRequest.SessionId;
+            var messages = await _chatService.GetMessagesAsync(sessionId);
+            await _chatService.AddMessageAsync(sessionId, chatRequest.UserMessage, "User");
+            var response = await _semanticKernelService.GetChatResponseAsync(chatRequest.UserMessage);
+            // var response = await _semanticKernelService.GetChatResponseWithHistoryAsync(chatRequest.UserMessage, messages);
+            //var response = await _semanticKernelService.GetChatResponseWithRagAsync(chatRequest.UserMessage);
+            await _chatService.AddMessageAsync(sessionId, response, "Bot");
             return Ok(response);
         }
     }
+    public record ChatRequest(string UserMessage, string SessionId);
 }

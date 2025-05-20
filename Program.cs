@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SKWebChatBot.Configuration;
 using SKWebChatBot.Data;
 using SKWebChatBot.Services;
 using System.Configuration;
@@ -6,16 +7,19 @@ using System.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSingleton<SemanticKernelService>();
-builder.Services.AddControllersWithViews();
-
-var connexion = builder.Configuration.GetConnectionString("SKWebChatBotBdtConnection");
 builder.Services.AddDbContext<AppDbContext>(o =>
 {
     o.UseSqlServer(builder.Configuration.GetConnectionString("SKWebChatBotBdtConnection"),
         o => o.CommandTimeout(300));
     o.EnableSensitiveDataLogging();
 }, ServiceLifetime.Transient);
+
+builder.Services.Configure<SemanticKernelSettings>(builder.Configuration.GetSection("SemanticKernelSettings"));
+builder.Services.AddSingleton<SemanticKernelService>();
+builder.Services.AddTransient<ChatService>();
+builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
+builder.Services.AddDistributedMemoryCache();
 
 
 var app = builder.Build();
@@ -34,6 +38,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

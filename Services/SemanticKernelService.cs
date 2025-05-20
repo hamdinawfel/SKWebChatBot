@@ -1,15 +1,19 @@
-﻿using Microsoft.SemanticKernel;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.SemanticKernel;
+using SKWebChatBot.Configuration;
 
 namespace SKWebChatBot.Services
 {
     public class SemanticKernelService
     {
         private readonly Kernel _kernel;
-        public SemanticKernelService(IConfiguration configuration)
+        private readonly IOptions<SemanticKernelSettings> _settings;
+        public SemanticKernelService(IOptions<SemanticKernelSettings> settings)
         {
-            var deploymentName = configuration["SemanticKernel.deploymentName"];
-            var endpoint = configuration["SemanticKernel.endpoint"];
-            var apiKey = configuration["SemanticKernel.apiKey"];
+            _settings = settings;
+            var deploymentName = _settings.Value.DeploymentName;
+            var endpoint = _settings.Value.Endpoint;
+            var apiKey = _settings.Value.ApiKey;
 
             var builder = Kernel.CreateBuilder();
 
@@ -22,7 +26,7 @@ namespace SKWebChatBot.Services
         }
 
 
-        public async Task<string> GetCharResponceAsync(string userMessage)
+        public async Task<string> GetChatResponseAsync(string userMessage)
         {
             var result = await _kernel.InvokePromptAsync(userMessage);
             return result.ToString();

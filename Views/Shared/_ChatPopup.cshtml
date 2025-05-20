@@ -16,30 +16,30 @@
 </div>
 
 <script>
-    // document.addEventListener("DOMContentLoaded", function() {
-    //     let sessionId = getSessionId();
-    //     fetchChatHistory(sessionId);
-    // });
+    document.addEventListener("DOMContentLoaded", function() {
+        let sessionId = getSessionId();
+        fetchChatHistory(sessionId);
+    });
 
-    // function fetchChatHistory(sessionId) {
-    //     $.ajax({
-    //         url: `/api/chat/${sessionId}`,
-    //         type: "GET",
-    //         contentType: "application/json",
-    //         success: function (data) {
-    //             console.log(data);
-    //             data.forEach(function (messageObj) {
-    //                 let className = messageObj.sender == "User" ? "text-end alert alert-primary" : "alert alert-success";
-    //                 let message = messageObj.sender == "User" ? `<strong>You: </strong>${messageObj.message}` : messageObj.message;
-    //                 appendMessage(message, className);
-    //             });
-    //         },
-    //         error: function (xhr, status, error) {
-    //             console.error("Chat history request failed:", error);
-    //             appendMessage("Error loading chat history.", "alert alert-danger");
-    //         }
-    //     });
-    // }
+    function fetchChatHistory(sessionId) {
+        $.ajax({
+            url: `/api/chat/${sessionId}`,
+            type: "GET",
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data);
+                data.forEach(function (messageObj) {
+                    let className = messageObj.sender == "User" ? "text-end alert alert-primary" : "alert alert-success";
+                    let message = messageObj.sender == "User" ? `<strong>You: </strong>${messageObj.message}` : messageObj.message;
+                    appendMessage(message, className);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Chat history request failed:", error);
+                appendMessage("Error loading chat history.", "alert alert-danger");
+            }
+        });
+    }
 
     document.getElementById("chat-form").addEventListener("submit", function(event) {
         event.preventDefault(); // Prevent form submission
@@ -76,33 +76,33 @@
 
      });
 
-    //   function appendMessage(message, className) {
-    //     let chatContent = document.getElementById("chat-content");
-    //     let msgDiv = document.createElement("div");
-    //     msgDiv.className = className;
-    //     msgDiv.innerHTML = message;
-    //     chatContent.appendChild(msgDiv);
+      function appendMessage(message, className) {
+        let chatContent = document.getElementById("chat-content");
+        let msgDiv = document.createElement("div");
+        msgDiv.className = className;
+        msgDiv.innerHTML = message;
+        chatContent.appendChild(msgDiv);
 
-    //     // Auto-scroll to the bottom
-    //     chatContent.scrollTop = chatContent.scrollHeight;
-    // }
+        // Auto-scroll to the bottom
+        chatContent.scrollTop = chatContent.scrollHeight;
+    }
 
-    // // Function to generate a UUID
-    // function generateUUID() {
-    //     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    //         var r = Math.random() * 16 | 0,
-    //             v = c === 'x' ? r : (r & 0x3 | 0x8);
-    //         return v.toString(16);
-    //     });
-    // }
+    // Function to generate a UUID
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0,
+                v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
 
-    // // Check if session ID exists, otherwise create a new one
-    // function getSessionId() {
-    //     let sessionId = localStorage.getItem("chatSessionId");
-    //     if (!sessionId) {
-    //         sessionId = generateUUID();
-    //         localStorage.setItem("chatSessionId", sessionId);
-    //     }
-    //     return sessionId;
-    // }
+    // Check if session ID exists, otherwise create a new one
+    function getSessionId() {
+        let sessionId = localStorage.getItem("chatSessionId");
+        if (!sessionId) {
+            sessionId = generateUUID();
+            localStorage.setItem("chatSessionId", sessionId);
+        }
+        return sessionId;
+    }
 </script>
