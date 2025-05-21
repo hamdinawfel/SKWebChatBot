@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Services\career-profiles.pdf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.5">
       <PrivateAssets>all</PrivateAssets>
@@ -15,6 +19,7 @@
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.51.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.51.0-preview" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="PdfPig" Version="0.1.10" />
   </ItemGroup>
 
 </Project>
